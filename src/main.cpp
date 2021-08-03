@@ -1,21 +1,15 @@
-#include <GLFW/glfw3.h>
 #include <iostream>
+#include <Render/Window.h>
 
-int main()
-{
-	if (!glfwInit())
-	{
-    	std::cout << "No, no" << std::endl;
-    	return -1;
-	}
-	GLFWwindow* pWindow = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
+int main() {
+	Render::Window* window = new Render::Window(640, 480, "title", 1);
 
-	while (!glfwWindowShouldClose(pWindow))
-	{
-    	glfwSwapBuffers(pWindow);
-    	glfwPollEvents();
+	while (!window->shouldClose()) {
+		window->clear();
+		window->swapBuffers();
+		window->pollEvents();
 	}
 
-	glfwDestroyWindow(pWindow);
-	glfwTerminate();
+	delete window;
+	
 }
