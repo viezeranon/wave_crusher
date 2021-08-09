@@ -2,37 +2,42 @@
 
 #include <iostream>
 
-namespace Render {
-	Window::Window(int width,
-				   int height,
-				   const char* title,
-				   int swapInterval,
-				   GLFWmonitor* monitor,
-				   GLFWwindow* shared) : m_width(width), m_height(height)
-	{
-		if (!glfwInit()) {
-			std::cerr << "glfwInit error" << std::endl;
-			return;
-		}
 
-		m_pWindow = glfwCreateWindow(m_width, m_height, title, monitor, shared);
-
-		glfwMakeContextCurrent(m_pWindow);
-		glfwSwapInterval(swapInterval);
-
-		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-		{
-			std::cout << "Failed to initialize GLAD" << std::endl;
-			return;
-		}
-
-		glClearColor(0.0, 0.0, 1.0, 1.0);
+Window::Window(const char* title,
+	int swapInterval,
+	Waves* waves,
+	GLFWmonitor* monitor,
+	GLFWwindow* shared) : m_waves(waves)
+{
+	if (!glfwInit()) {
+		std::cerr << "glfwInit error" << std::endl;
+		return;
 	}
 
-	Window::~Window()
+	m_pWindow = glfwCreateWindow(width, height, title, monitor, shared);
+
+	glfwMakeContextCurrent(m_pWindow);
+	glfwSwapInterval(swapInterval);
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		glfwDestroyWindow(m_pWindow);
-		glfwTerminate();
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return;
 	}
+
+	glClearColor(0.0, 0.0, 1.0, 1.0);
+	glOrtho(0.0f, width, height, 0.0f, 0.0f, 1.0f);
 }
+
+Window::~Window()
+{
+	glfwDestroyWindow(m_pWindow);
+	glfwTerminate();
+}
+void Window::render()
+{
+	glColor3f(0.f, 0.f, 0.f);
+	glRecti(0, wavesUpY, m_waves->getLeftEdgeX(), height);
+}
+
 

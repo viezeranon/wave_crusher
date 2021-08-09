@@ -3,30 +3,32 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-namespace Render {
-	class Window {
-	public:
-		Window(int _width,
-			   int _height,
-			   const char* title,
-			   int swapInterval,
-			   GLFWmonitor* monitor = nullptr,
-			   GLFWwindow* shared = nullptr);
-		~Window();
+#include <main.h>
+#include <Wave/Waves.h>
 
-		GLFWwindow* getWindowPointer() { return m_pWindow; }
-		int getWidth() { return m_width; }
-		int getHeight() { return m_height; }
 
-		int shouldClose() { return glfwWindowShouldClose(m_pWindow); }
-		void swapBuffers() { glfwSwapBuffers(m_pWindow); }
-		void pollEvents() { glfwPollEvents(); }
-		void clear() { glClear(GL_COLOR_BUFFER_BIT); }
+class Window {
+public:
+	Window(const char* title,
+		int swapInterval,
+		Waves* waves,
+		GLFWmonitor* monitor = nullptr,
+		GLFWwindow* shared = nullptr);
+	~Window();
 
-	private:
-		int m_width;
-		int m_height;
-		int m_GLFWwindowheight;
-		GLFWwindow* m_pWindow;
-	};
-}
+	GLFWwindow* getWindowPointer() { return m_pWindow; }
+
+	int shouldClose() { return glfwWindowShouldClose(m_pWindow); }
+	void swapBuffers() { glfwSwapBuffers(m_pWindow); }
+	void pollEvents() { glfwPollEvents(); }
+	void clear() { glClear(GL_COLOR_BUFFER_BIT); }
+	void flush() { glFlush(); }
+
+	void render();
+
+private:
+
+	int m_GLFWwindowheight;
+	GLFWwindow* m_pWindow;
+	Waves* m_waves;
+};
